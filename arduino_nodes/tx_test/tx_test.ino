@@ -4,7 +4,6 @@
 #include <SPI.h>
 #include "nRF24L01.h"
 #include "RF24.h"
-#include "printf.h"
 
 
 // Set up nRF24L01 radio on SPI bus plus pins 9 & 10 for CE and CSN
@@ -16,9 +15,8 @@ const uint64_t node_addr = 0xF0F0F0F0A1;
 
 void setup(void)
 {
-	Serial.begin(57600);
-	printf_begin();
-	printf("\n\rRF24/examples/pingpair/\n\r");
+	Serial.begin(9600);
+	Serial.print("\n\rRF24/examples/pingpair/\n\r");
 
 
 	// Setup and configure rf radio
@@ -37,7 +35,7 @@ void setup(void)
 	radio.startListening();
 
 	// print config for debug
-	radio.printDetails();
+	//radio.printDetails();
 }
 
 void loop(void)
