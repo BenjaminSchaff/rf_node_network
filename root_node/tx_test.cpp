@@ -48,43 +48,42 @@ int main(int argc, char** argv){
 		// End rx mode before tx.
 		radio.stopListening();
 
-
 		//unsigned long time = millis();
 		unsigned long message = (i++)%2?SIG_TURN_ON:SIG_TURN_OFF;
-		printf("Sending %lx\n", message);
+		printf("Sending\t%lx ", message);
 		bool success = radio.write( &message, sizeof(unsigned long) );
 
-		if (success){
-			printf(" success. ");
-		} else {
+		if (!success){
 			printf(" failed.\n");
-		}
-		// resume rx, wait for response
-		radio.startListening();
-
-		// Wait for response or timeout
-		unsigned long wait_start = millis();
-		bool timeout = false;
-		while ( ! radio.available() && ! timeout ) {
-			if (millis() - wait_start > 2000 )
-				timeout = true;
-		}
-
-
-		// Print results of rx
-		if ( timeout )
-		{
-			printf("Failed, response timed out.\n");
 		} else {
-			unsigned long payload;
-			radio.read( &payload, sizeof(unsigned long) );
+			printf(" success. \t");
+			
+			// resume rx, wait for response
+			radio.startListening();
 
-			// print recieved message
-			printf("Got response %lx\n", payload);
+			// Wait for response or timeout
+			unsigned long wait_start = millis();
+			bool timeout = false;
+			while ( !radio.available() && !timeout ) {
+				if (millis() - wait_start > 2500 )
+					timeout = true;
+			}
+
+
+			// Print results of rx
+			if (timeout) {
+				printf("No response, timed out.\n");
+			} else {
+				unsigned long payload;
+				radio.read( &payload, sizeof(unsigned long) );
+
+				// print recieved message
+				printf("Got response %lx\n", payload);
+			}
 		}
 		sleep(1);
-	} // forever loop
-
+	} 
+	// loops forever, doesnt get here
 	return 0;
 }
 
