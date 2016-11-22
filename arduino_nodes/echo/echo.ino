@@ -5,6 +5,9 @@
 #include "nRF24L01.h"
 #include "RF24.h"
 
+#define SIG_TURN_ON  0x000000FF
+#define SIG_TURN_OFF 0x0000FF00
+#define SIG_ACKNO    0x00FF0000
 
 // Set up nRF24L01 radio on SPI bus plus pins 9 & 10 for CE and CSN
 RF24 radio(9, 10);
@@ -29,6 +32,8 @@ void setup(void)
 
 	// print config for debug
 	radio.printDetails();
+
+	//pinMode(LED_BUILTIN, OUTPUT); //dont use this pin, its used for SCK
 }
 
 void loop(void)
@@ -44,7 +49,7 @@ void loop(void)
 
 			//print to serial for debug
 			Serial.print("Got: ");
-			Serial.print(payload);
+			Serial.print(payload, HEX);
 			
 			// wait for other to switch modes
 			delay(20);
@@ -53,6 +58,13 @@ void loop(void)
 		// stop rx before tx
 		radio.stopListening();
 
+		if (payload == SIG_TURN_ON) {
+			//digitalWrite(LED_BUILTIN, HIGH);
+			payload = SIG_ACKNO;
+		} else if (payload == SIG_TURN_OFF) {
+			//digitalWrite(LED_BUILTIN, LOW);
+			payload = SIG_ACKNO;
+		}
 		// echo payload
 		radio.write( &payload, sizeof(unsigned long) );
 		Serial.print(" Sent response.\n\r");

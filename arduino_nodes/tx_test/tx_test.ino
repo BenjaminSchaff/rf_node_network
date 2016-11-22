@@ -13,6 +13,11 @@ RF24 radio(9, 10);
 const uint64_t root_addr = 0xF0F0F0F0AA;
 const uint64_t node_addr = 0xF0F0F0F0A1;
 
+#define SIG_TURN_ON  0x000000FF
+#define SIG_TURN_OFF 0x0000FF00
+#define SIG_ACKNO   0x00FF0000
+
+
 void setup(void)
 {
 	Serial.begin(9600);
@@ -38,16 +43,19 @@ void setup(void)
 	//radio.printDetails();
 }
 
+int i = 0;
+
 void loop(void)
 {
 	// End rx mode before tx.
 	radio.stopListening();
 
 	// Send current time
-	unsigned long time = millis();
+	//unsigned long time = millis();
+	unsigned long message = (i++)%2?SIG_TURN_ON:SIG_TURN_OFF;
 	Serial.print("Now sending ");
-	Serial.print(time);
-	bool success = radio.write( &time, sizeof(unsigned long) );
+	Serial.print(message, HEX);
+	bool success = radio.write( &message, sizeof(unsigned long) );
 
 	if (success) {
 		Serial.print(" success...");
@@ -77,7 +85,7 @@ void loop(void)
 
 		// print revieved message
 		Serial.print("Got response ");
-		Serial.println(payload);
+		Serial.println(payload, HEX);
 
 		delay(2000);
 	}
