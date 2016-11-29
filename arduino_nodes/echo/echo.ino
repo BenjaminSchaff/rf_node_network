@@ -29,11 +29,6 @@ void setup(void)
 	radio.openReadingPipe(1, root_addr); //read from root
 
 	radio.startListening();
-
-	// print config for debug
-	radio.printDetails();
-
-	//pinMode(LED_BUILTIN, OUTPUT); //dont use this pin, its used for SCK
 }
 
 void loop(void)
