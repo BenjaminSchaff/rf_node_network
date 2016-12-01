@@ -27,8 +27,6 @@ int i = 0; // because what program doesnt have an int i?
 
 int main(int argc, char** argv){
 
-	cout << "RF24/examples/GettingStarted/\n";
-
 	radio.begin();
 
 	// optionally, increase the delay between retries & # of retries
@@ -49,17 +47,19 @@ int main(int argc, char** argv){
 		radio.stopListening();
 
 		//unsigned long time = millis();
-		unsigned long message = (i++)%2?SIG_TURN_ON:SIG_TURN_OFF;
+		i++;
+		unsigned long message = (i%2)?(SIG_TURN_ON):(SIG_TURN_OFF);
 		printf("Sending\t%lx ", message);
 		bool success = radio.write( &message, sizeof(unsigned long) );
-
+		radio.startListening();
+		
 		if (!success){
 			printf(" failed.\n");
 		} else {
-			printf(" success. \t");
-			
+			printf(" success. \n");
+			/*			
 			// resume rx, wait for response
-			radio.startListening();
+			//radio.startListening();
 
 			// Wait for response or timeout
 			unsigned long wait_start = millis();
@@ -79,9 +79,9 @@ int main(int argc, char** argv){
 
 				// print recieved message
 				printf("Got response %lx\n", payload);
-			}
+			}*/
 		}
-		sleep(1);
+		sleep(5);
 	} 
 	// loops forever, doesnt get here
 	return 0;
