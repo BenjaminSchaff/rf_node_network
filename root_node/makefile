@@ -4,7 +4,7 @@ prefix := /usr/local
 CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
 
 # define all programs
-PROGRAMS = tx_test
+PROGRAMS = tx_test switch
 SOURCES = ${PROGRAMS:=.cpp}
 
 all: ${PROGRAMS}
