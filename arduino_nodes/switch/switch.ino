@@ -12,6 +12,8 @@
 
 #define SERVO_ON 140 // servo angle to flip switch on
 #define SERVO_OFF 60 // angle to flip switch off
+#define SERVO_MID 100 // idle pos of servo]
+
 #define DISABLE_DELAY 1000
 #define SERVO_PIN 8
 // Set up nRF24L01 radio on SPI bus plus pins 9 & 10 for CE and CSN
@@ -57,16 +59,12 @@ void loop(void)
 			Serial.print("Got: ");
 			Serial.print(payload, HEX);
 
-			if (payload == SIG_TURN_ON) {
-				set_switch(1);
-			} else if (payload == SIG_TURN_OFF) {
-				set_switch(0);
-			}
-			
-			// wait for other to switch modes
 			delay(20);
+
 		}
 
+		// wait for other to switch modes
+		//delay(20);
 		// stop rx before tx
 		//radio.stopListening();
 
@@ -87,8 +85,10 @@ void loop(void)
  * 
  */
 void set_switch(int i) {
-	servo.attach(SERVO_PIN);
-	servo.write(i?SERVO_ON:SERVO_OFF);
-	delay(DISABLE_DELAY);
-	servo.detach();
+	servo.attach(SERVO_PIN);//enable pwm on servo pin
+	servo.write(i?SERVO_ON:SERVO_OFF);	// tell servo to go to move
+	delay(DISABLE_DELAY);	// wait for servo to get there
+	servo.write(SERVO_MID);	// return servo to idle state in middle
+	delay(DISABLE_DELAY/2);	// let it get there
+	servo.detach();			// disable pwm (and thus motor) to save power
 }
