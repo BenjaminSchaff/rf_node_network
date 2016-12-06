@@ -30,8 +30,8 @@ void setup(void)
 
 	radio.setRetries(15, 15); // retries 15 times after 15*250us each
 
-	// optionally, reduce the payload size.	seems to improve reliability
-	radio.setPayloadSize(8);
+	radio.setPayloadSize(8);  // drop payload size to 8 bytes for improved comm reliability.
+
 
 	// Open pipes to other nodes for communication
 	radio.openWritingPipe(root_addr); //we are root, write from here

@@ -2,3 +2,9 @@ Code related to wireless sensor network based on the nRF24L01+ 2.4GHz Wireless T
 
 
 Uses library RF24 library found here: https://github.com/tmrh20/RF24/
+
+ToDo:
+
+	dedicated on/off tx
+
+	ability to query battery voltage
