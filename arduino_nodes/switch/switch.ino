@@ -10,11 +10,11 @@
 #define SIG_TURN_OFF 0x0000FF00
 #define SIG_ACKNO    0x00FF0000
 
-#define SERVO_ON 140 // servo angle to flip switch on
+#define SERVO_ON 160 // servo angle to flip switch on
 #define SERVO_OFF 60 // angle to flip switch off
-#define SERVO_MID 100 // idle pos of servo]
+#define SERVO_MID 95 // idle pos of servo]
 
-#define DISABLE_DELAY 1000
+#define DISABLE_DELAY 1500
 #define SERVO_PIN 8
 // Set up nRF24L01 radio on SPI bus plus pins 9 & 10 for CE and CSN
 RF24 radio(9, 10);
